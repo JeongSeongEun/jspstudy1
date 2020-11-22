@@ -44,6 +44,7 @@ location.href="main.jsp";
 <% if( !id.equals("admin") && !login.equals("admin")) { %>
 <a href="deleteForm.jsp?id=<%=mem.getId() %>">[탈퇴]</a>
 <% } %></td></tr>
+<tr><td colspan="3"><input type="button" onclick="location.href='main.jsp'" value="메인으로 돌아가기" ></td></tr>
 </table>
 </body>
 </html>

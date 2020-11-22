@@ -15,12 +15,7 @@
 <%
 //이미지 파일 업로드 위치 지정
 String path=application.getRealPath("")+"model1/member/picture/";
-
 String fname=null;
-File f=new File(path+"sm_"+fname);
-if(!f.exists()){
-	f.mkdirs();
-}
 //업로드 실행
 MultipartRequest multi=new MultipartRequest(request, path, 10*1024*1024,"UTF-8");
 //fname:<input type="file" name="picture">선택한 파일의 이름
@@ -37,6 +32,10 @@ BufferedImage thumb=new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
 Graphics2D g=thumb.createGraphics();
 g.drawImage(bi, 0, 0, width, height,null);
 //f: 섬네일 이미지 저장을 위한 파일 설정
+File f=new File(path+"sm_"+fname);
+if(!f.exists()){
+	f.mkdirs();
+}
 ImageIO.write(thumb, "jpg", f);
 %>
 <script type="text/javascript">

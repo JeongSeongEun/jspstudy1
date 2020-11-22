@@ -27,7 +27,7 @@ else
 	dbmem=dao.selectOne(mem.getId());
  String msg="비밀번호가 틀렸습니다";
  String url="updateForm.jsp?id="+mem.getId();
- if(login.equals("admin") || mem.getPass().equals(dbmem.getPass())){
+ if(mem.getPass().equals(dbmem.getPass())){
 	 int result=dao.update(mem);
 	 //int result=0;
 	 if(result>0){
