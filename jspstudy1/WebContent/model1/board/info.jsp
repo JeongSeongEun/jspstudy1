@@ -33,7 +33,8 @@ dao.readcntAdd(num); //조회수 증가
     <tr>
         <th>첨부파일</th>
         <td><%if(b.getFile1()==null || b.getFile1().equals("")){ %> &nbsp;
-        <%}else{ %><a href="<%=b.getFile1()%>"><%=b.getFile1()%></a><%} %></td>
+        <%}else{//첨부파일이 존재 %>
+        <a href="./file/<%=b.getFile1()%>"><%=b.getFile1()%></a><%} %></td>
     </tr>
     <tr>
         <td colspan="2">

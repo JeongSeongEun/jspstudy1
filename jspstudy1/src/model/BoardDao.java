@@ -73,7 +73,7 @@ public class BoardDao {
 		String sql="select * from board order by grp desc, grpstep asc limit ?,?";
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1,  (pageNum-1)*limit);
+			pstmt.setInt(1,  (pageNum-1)*limit);//0이면 첫번째 레코드
 			pstmt.setInt(2, limit);
 			rs=pstmt.executeQuery();
 			while(rs.next()) {
@@ -143,5 +143,38 @@ public class BoardDao {
 		}finally {
 			DbConnection.close(conn, pstmt, null);
 		}
+	}
+	public void grpStepAdd(int grp, int grpstep) {
+		Connection conn=DbConnection.getConnection();
+		PreparedStatement pstmt=null;
+		String sql="update board set grpstep = grpstep+1 where grp = ? and grpstep > ?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, grp);
+			pstmt.setInt(2, grpstep);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbConnection.close(conn, pstmt, null);
+		}
+	}
+	public boolean update(Board board) {
+		Connection conn=DbConnection.getConnection();
+		PreparedStatement pstmt=null;
+		String sql="update board set name=?, subject=?, content=?, file1=? where num=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,  board.getName());
+			pstmt.setString(2,  board.getSubject());
+			pstmt.setString(3,  board.getContent());
+			pstmt.setString(4,  board.getFile1());
+			pstmt.setInt(5, board.getNum());
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
