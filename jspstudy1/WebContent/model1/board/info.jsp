@@ -5,13 +5,13 @@
 <%
 int num=Integer.parseInt(request.getParameter("num"));
 BoardDao dao= new BoardDao();
-Board b=dao.selectOne(num);
-dao.readcntAdd(num);
+Board b=dao.selectOne(num); //num에 해당하는 게시물 조회
+dao.readcntAdd(num); //조회수 증가
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>게시글 상세보기</title>
 <link rel="stylesheet" href="../../css/main.css">
 </head>
@@ -31,14 +31,15 @@ dao.readcntAdd(num);
         <td style="text-align: left; vertical-align: text-top; height: 200px;"><%=b.getContent()%></td>
     </tr>
     <tr>
-        <th width="20%">첨부파일</th>
-        <td><a href="<%=b.getFile1()%>"><%=b.getFile1()%></a></td>
+        <th>첨부파일</th>
+        <td><%if(b.getFile1()==null || b.getFile1().equals("")){ %> &nbsp;
+        <%}else{ %><a href="<%=b.getFile1()%>"><%=b.getFile1()%></a><%} %></td>
     </tr>
     <tr>
         <td colspan="2">
-            <a href="#">[답변]</a>
-            <a href="#">[수정]</a>
-            <a href="#">[삭제]</a>
+            <a href="replyForm.jsp?num=<%=b.getNum()%>">[답변]</a>
+            <a href="updateForm.jsp?num=<%=b.getNum()%>">[수정]</a>
+            <a href="deleteForm.jsp?num=<%=b.getNum()%>">[삭제]</a>
             <a href="list.jsp">[목록]</a>
         </td>
     </tr>

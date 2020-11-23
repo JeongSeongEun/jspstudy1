@@ -108,16 +108,19 @@ public class BoardDao {
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, num); //db에 전달할 파라미터(?)값 설정
 			rs=pstmt.executeQuery();
-			if(rs.next()){ //id에 해당하는 Member정보가 존재.
+			if(rs.next()){//id에 해당하는 Member정보가 존재.
 				Board b=new Board();
-				b.setName(rs.getString("Name"));
+				b.setNum(rs.getInt("num"));
+				b.setName(rs.getString("name"));
 				b.setPass(rs.getString("pass"));
-				b.setSubject(rs.getString("subjet"));
+				b.setSubject(rs.getString("subject"));
 				b.setContent(rs.getString("content"));
-				b.setFile1(rs.getString("File1"));
+				b.setFile1(rs.getString("file1"));
 				b.setGrp(rs.getInt("grp"));
 				b.setGrplevel(rs.getInt("grplevel"));
 				b.setGrpstep(rs.getInt("grpstep"));
+				b.setReadcnt(rs.getInt("readcnt"));
+				b.setRegdate(rs.getTimestamp("regdate"));
 				return b;//id에 해당하는 db의 정보 저장
 			}
 		} catch (SQLException e) {
@@ -129,21 +132,16 @@ public class BoardDao {
        }
 	public void readcntAdd(int num) {
 		Connection conn=DbConnection.getConnection();
-		String sql="update board set readcnt=? where num=?";
+		String sql="update board set readcnt= readcnt+1 where num=?";
 		PreparedStatement pstmt=null;
-		ResultSet rs=null;
 		try {
 			pstmt = conn.prepareStatement(sql);
-            int now = selectOne(num).getReadcnt();
-            pstmt.setInt(1,now+1);
-            pstmt.setInt(2,num);
-            rs = pstmt.executeQuery();
-            return;
+            pstmt.setInt(1,num);
+            pstmt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
-			DbConnection.close(conn, pstmt, rs);
+			DbConnection.close(conn, pstmt, null);
 		}
-		return;
 	}
 }
