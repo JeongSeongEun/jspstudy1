@@ -177,4 +177,21 @@ public class BoardDao {
 		}
 		return false;
 	}
+	public boolean delete(int num) {
+		Connection conn=DbConnection.getConnection();
+		PreparedStatement pstmt=null;
+		String sql="delete from board where num=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			int cnt=pstmt.executeUpdate();
+			if(cnt>0)
+				return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbConnection.close(conn, pstmt, null);
+		}
+		return false;
+	}
 }

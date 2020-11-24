@@ -5,7 +5,7 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%--
-1. 파라미터 정보들을 Board 객체저장
+1. 파라미터 정보들을 Board 객체저장 => usebaen액션 태그 사용불가
 2. 비밀번호 일치
 	첨부파일의 변경이 없는굥우 file2 파라미터의 내용을 다시 저장하기
 	파라미터의 내용을 해당 게시물의 내용을 수정하기
@@ -16,6 +16,7 @@
 	비밀번호 오류 메시지 출력하고 , updateForm.jsp페이지 이동
  --%>
 <%
+	//1. 파라미터값을 Board객체에 저장
 	Board board = new Board();
 	String path = application.getRealPath("/") + "model1/board/file/";
 	MultipartRequest multi = new MultipartRequest(request, path, 10 * 1024 * 1024, "UTF-8");
@@ -25,16 +26,19 @@
 	board.setSubject(multi.getParameter("subject"));
 	board.setContent(multi.getParameter("content"));
 	board.setFile1(multi.getFilesystemName("file1"));
-	//파일부분의 수정이 없는경우
+	//파일부분의 수정이 없는경우 => 기존파일정보 유지.
 	if (board.getFile1() == null || board.getFile1().equals("")) {
 		board.setFile1(multi.getParameter("file2"));
 	}
+	//2. 비밀번호 검증.
 	BoardDao dao = new BoardDao();
 	Board dbBoard = dao.selectOne(board.getNum());
 	String msg = "비밀번호가 틀렸습니다.";
 	String url = "updateForm.jsp?num=" + board.getNum();
+	//board.getPass(): 입력된 비밀번호
+	//dbBoard.getPass(): DB에 저장된 비밀번호
 	if (board.getPass().equals(dbBoard.getPass())) {
-		if (dao.update(board)) {
+		if (dao.update(board)) { //db의 게시물 수정
 			msg = "게시글 수정 완료";
 			url = "info.jsp?num=" + board.getNum();
 		} else {
